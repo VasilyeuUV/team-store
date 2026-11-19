@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import jsdoc from 'eslint-plugin-jsdoc';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default tseslint.config(
@@ -8,5 +9,35 @@ export default tseslint.config(
   { languageOptions: { globals: globals.browser } },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    plugins: { jsdoc },
+    rules: {
+      'jsdoc/require-jsdoc': [
+        'warn',
+        {
+          publicOnly: true,
+          require: {
+            FunctionDeclaration: true,
+            ClassDeclaration: true,
+            MethodDefinition: false,
+          },
+          contexts: [
+            'TSInterfaceDeclaration',
+            'TSTypeAliasDeclaration',
+            'TSEnumDeclaration',
+            'ExportNamedDeclaration > VariableDeclaration',
+          ],
+        },
+      ],
+      'jsdoc/require-description': 'warn',
+    },
+  },
+  {
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'warn',
+      'prefer-const': 'warn',
+      eqeqeq: ['warn', 'always'],
+    },
+  },
   eslintConfigPrettier,
 );
