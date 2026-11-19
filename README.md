@@ -41,7 +41,7 @@ GitHub Actions · Netlify.
 Conventional Commits на английском: `feat:`, `fix:`, `test:`, `chore:`, `docs:`, `refactor:`. В скобках можно указать название блока, к которому относится коммит.
 Тип — латиницей, описание — по-английски с указанием в скобках номера задачи в формате (#1).
 
-Пример: `feat: добавить фильтр по цене (#3)`
+Пример: `feat: add a price filter (#3)`
 
 ## Стиль кода и документация
 
@@ -141,7 +141,24 @@ GitHub Projects, колонки: **Todo → In Progress → In Review → Done**
 
 ## Структура проекта
 
-> Будет добавлено после настройки каркаса.
+```
+src/
+  main.ts            # точка входа: подключает стили и запускает UI
+  config/
+    constants.ts     # константы приложения
+  domain/
+    types.ts         # сущности предметной области (пока пусто)
+  services/          # бизнес-логика (пока пусто)
+  data/              # источники данных: dev / fakeAPI (пока пусто)
+  ui/
+    app.ts           # каркас страницы (текст-приглашение)
+  styles/
+    reset.css        # нормализация
+    main.css         # базовые стили
+```
+
+- `index.html` — оболочка: контейнер `#app` + подключение `src/main.ts`.
+- `public/` — статика «как есть» (favicon).
 
 ## Запуск
 
@@ -154,8 +171,15 @@ npm run build    # типизация + продакшен-сборка в dist/
 npm run preview  # локальный просмотр собранного dist/
 npm test         # unit-тесты (Vitest)
 npm run lint     # ESLint
-npm run format   # Prettier (автоформат)
+npm run format   # Prettier
 ```
+
+### Как проверить, что каркас работает
+
+1. Выполни `npm run dev` и открой адрес из консоли.
+2. На странице должен появиться текст **«Добро пожаловать в Techno Store!»** —
+   значит, точка входа и рендер работают.
+3. `npm run build` + `npm run preview` — собранная версия открывается так же.
 
 ## Деплой
 
@@ -168,10 +192,10 @@ npm run format   # Prettier (автоформат)
 
 Перед сдачей: открыть ссылку в инкогнито и убедиться, что сайт работает.
 
-- **Сайт:** (добавить после первого успешного деплоя)
+- **Сайт:** https://team-store-tsub.netlify.app/
 
 ## Ссылки
 
 - Репозиторий: https://github.com/VasilyeuUV/team-store
 - Доска: https://github.com/users/VasilyeuUV/projects/1
-- Деплой: (уточнить после настройки)
+- Деплой: https://team-store-tsub.netlify.app/
