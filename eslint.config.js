@@ -39,5 +39,23 @@ export default tseslint.config(
       eqeqeq: ['warn', 'always'],
     },
   },
+  {
+    files: ['src/**/*.ts'],
+    ignores: ['src/**/*.d.ts'],
+    rules: {
+      'jsdoc/require-file-overview': [
+        'warn',
+        {
+          tags: {
+            file: {
+              initialCommentsOnly: true,
+              mustExist: true,
+              preventDuplicates: true,
+            },
+          },
+        },
+      ],
+    },
+  },
   eslintConfigPrettier,
 );
