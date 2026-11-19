@@ -145,8 +145,17 @@ GitHub Projects, колонки: **Todo → In Progress → In Review → Done**
 
 ## Запуск
 
-> Будет добавлено после настройки каркаса
-> (установка зависимостей, команды `dev` / `build` / `test` / `lint`).
+Требования: Node.js 20+ (рекомендуется 22), npm.
+
+```bash
+npm install      # установка зависимостей
+npm run dev      # dev-сервер с HMR
+npm run build    # типизация + продакшен-сборка в dist/
+npm run preview  # локальный просмотр собранного dist/
+npm test         # unit-тесты (Vitest)
+npm run lint     # ESLint
+npm run format   # Prettier (автоформат)
+```
 
 ## Деплой
 
