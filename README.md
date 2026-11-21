@@ -144,20 +144,25 @@ GitHub Projects, колонки: **Todo → In Progress → In Review → Done**
 ```
 src/
   main.ts            # точка входа: подключает стили и запускает UI
+  assets/
+    icons/
+      github.svg     # иконка GitHub (16×16, fill="currentColor")
   config/
-    constants.ts     # константы: название, навигация, команда, стек, ссылки
-    constants.test.ts
+    constants.ts     # общие константы: название, год, курс, внешние ссылки
+    routes.ts        # AppRoute и ROUTE_HASHES (#/, #/about, #/cart)
+    navigation.ts    # NavItem и NAV_ITEMS — пункты меню в шапке
+    team.ts          # TeamMember, TEAM_MEMBERS и TECH_STACK
   domain/
-    types.ts         # типы: AppRoute, NavItem, TeamMember
+    types.ts         # типы предметной области (товары, корзина) — пока пусто
   services/
-    router.ts        # хэш-роутер (#/, #/about, #/cart)
-    router.test.ts
+    router.ts        # хэш-роутер: разбор адреса, переходы, подписка
   data/              # источники данных: dev / fakeAPI (пока пусто)
   ui/
     app.ts           # каркас: header + main + footer, смена страниц по роутеру
     dom.ts           # хелперы создания DOM-элементов
+    icons.ts         # создание SVG-иконок из assets/icons и ссылок с иконками
     header.ts        # шапка: логотип, навигация, ссылка на корзину
-    footer.ts        # подвал: год, команда, репозиторий, RS School
+    footer.ts        # подвал: команда, год, репозиторий, RS School
     pages/
       home.ts        # главная (заглушка каталога)
       about.ts       # «О нас»: о магазине, стек, карточки команды
@@ -165,15 +170,49 @@ src/
   styles/
     reset.css        # нормализация
     main.css         # базовые стили, каркас, адаптив
+tests/
+  router.test.ts     # services/router
+  routes.test.ts     # config/routes
+  navigation.test.ts # config/navigation
+  team.test.ts       # config/team
 ```
-
-- Маршрутизация — через hash (`#/about`), поэтому работает на Netlify без
-  настройки редиректов. `ui/` обращается к роутеру только через `services/`.
-- Аватары команды подгружаются с GitHub (`https://github.com/<login>.png`),
-  локальные изображения в репозитории не хранятся.
 
 - `index.html` — оболочка: контейнер `#app` + подключение `src/main.ts`.
 - `public/` — статика «как есть» (favicon).
+
+### Договорённости
+
+**Слои и зависимости**
+
+- `domain/` — только типы предметной области магазина (товары, корзина и т.п.).
+  Слой ни от чего не зависит: не импортирует `config/`, `services/`, `ui/`.
+- `config/` — статические настройки, разнесённые по смыслу: маршруты
+  (`routes.ts`), навигация (`navigation.ts`), команда (`team.ts`), общие
+  константы (`constants.ts`). Тип хранится рядом с константой, которую он
+  описывает. Не складываем всё в один файл.
+- `services/` — логика без разметки (роутер, далее — каталог, корзина).
+  Использует `config/` и `domain/`.
+- `ui/` — компоненты и страницы. Обращается к данным только через
+  `services/`, напрямую в `data/` не ходит.
+- Маршрутизация — через hash (`#/about`), поэтому работает на Netlify без
+  настройки редиректов.
+
+**SVG-иконки**
+
+- Каждая иконка — отдельный файл в `src/assets/icons/`, монохромный,
+  с `fill="currentColor"` (цвет наследуется от текста) и `aria-hidden="true"`.
+- Подключение — импортом с суффиксом `?raw` (типы даёт `vite/client`)
+  и созданием элемента через хелпер в `src/ui/icons.ts`. SVG-код в TS не пишем.
+- Аватары команды подгружаются с GitHub (`https://github.com/<login>.png`),
+  локальные изображения в репозитории не хранятся.
+
+**Тесты**
+
+- Unit-тесты лежат в папке `tests/` в корне репозитория, по одному файлу
+  на логический модуль: `tests/<модуль>.test.ts` (например, `router.test.ts`
+  для `src/services/router.ts`).
+- Импорты — относительные от `tests/`: `../src/services/router`.
+- Запуск — `npm test` (Vitest находит файлы `*.test.ts` автоматически).
 
 ## Запуск
 
