@@ -1,7 +1,38 @@
-/** @file Каркас страницы. */
-import { APP_TITLE } from '../config/constants';
+/** @file Каркас страницы: шапка, основная область и подвал с переключением страниц. */
+import type { AppRoute } from '../domain/types';
+import { getCurrentRoute, initRouter, subscribeToRoute } from '../services/router';
+import { createElement } from './dom';
+import { createFooter } from './footer';
+import { createHeader, setActiveNavLink } from './header';
+import { renderAboutPage } from './pages/about';
+import { renderCartPage } from './pages/cart';
+import { renderHomePage } from './pages/home';
 
-/** Отрисовывает текст-приглашение (индикатор работы приложения). */
+const PAGE_RENDERERS: Readonly<Record<AppRoute, () => HTMLElement>> = {
+  home: renderHomePage,
+  about: renderAboutPage,
+  cart: renderCartPage,
+};
+
+/**
+ * Отрисовывает каркас приложения и подключает роутер.
+ * @param root контейнер приложения
+ */
 export function renderApp(root: HTMLElement): void {
-  root.textContent = `Добро пожаловать в ${APP_TITLE}!`;
+  const initialRoute = getCurrentRoute();
+  const header = createHeader(initialRoute);
+  const main = createElement('main', { className: 'main container' });
+  const footer = createFooter();
+
+  const showPage = (route: AppRoute): void => {
+    main.replaceChildren(PAGE_RENDERERS[route]());
+    setActiveNavLink(header, route);
+    window.scrollTo(0, 0);
+  };
+
+  root.replaceChildren(header, main, footer);
+  showPage(initialRoute);
+
+  subscribeToRoute(showPage);
+  initRouter();
 }
