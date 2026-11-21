@@ -1,15 +1,9 @@
 /** @file Хэш-роутер приложения: разбор адреса, переходы и подписка на смену страницы. */
-import type { AppRoute } from '../domain/types';
+import type { AppRoute } from '../config/routes';
+import { ROUTE_HASHES } from '../config/routes';
 
 /** Колбэк, вызываемый при смене маршрута. */
 export type RouteListener = (route: AppRoute) => void;
-
-/** Соответствие маршрута и его хэша в адресной строке. */
-export const ROUTE_HASHES: Readonly<Record<AppRoute, string>> = {
-  home: '#/',
-  about: '#/about',
-  cart: '#/cart',
-};
 
 const listeners = new Set<RouteListener>();
 let isInitialized = false;

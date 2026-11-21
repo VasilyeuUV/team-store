@@ -1,5 +1,5 @@
 /** @file Каркас страницы: шапка, основная область и подвал с переключением страниц. */
-import type { AppRoute } from '../domain/types';
+import type { AppRoute } from '../config/routes';
 import { getCurrentRoute, initRouter, subscribeToRoute } from '../services/router';
 import { createElement } from './dom';
 import { createFooter } from './footer';

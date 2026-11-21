@@ -1,11 +1,6 @@
 /** @file Подвал страницы: команда, год, репозиторий и RS School. */
-import {
-  COPYRIGHT_YEAR,
-  GITHUB_URL,
-  REPO_URL,
-  RS_SCHOOL_URL,
-  TEAM_MEMBERS,
-} from '../config/constants';
+import { COPYRIGHT_YEAR, GITHUB_URL, REPO_URL, RS_SCHOOL_URL } from '../config/constants';
+import { TEAM_MEMBERS } from '../config/team';
 import { createElement, createExternalLink } from './dom';
 import { createGithubLink } from './icons';
 

@@ -1,6 +1,7 @@
 /** @file Шапка страницы: логотип, навигация и ссылка на корзину. */
-import type { AppRoute } from '../domain/types';
-import { APP_TITLE, NAV_ITEMS } from '../config/constants';
+import type { AppRoute } from '../config/routes';
+import { APP_TITLE } from '../config/constants';
+import { NAV_ITEMS } from '../config/navigation';
 import { getRouteHash } from '../services/router';
 import { createElement } from './dom';
 

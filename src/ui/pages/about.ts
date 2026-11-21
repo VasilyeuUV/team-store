@@ -1,13 +1,7 @@
 /** @file Страница «О нас»: о магазине, стек технологий и команда. */
-import type { TeamMember } from '../../domain/types';
-import {
-  APP_TITLE,
-  COURSE_NAME,
-  GITHUB_URL,
-  RS_SCHOOL_URL,
-  TECH_STACK,
-  TEAM_MEMBERS,
-} from '../../config/constants';
+import type { TeamMember } from '../../config/team';
+import { APP_TITLE, COURSE_NAME, GITHUB_URL, RS_SCHOOL_URL } from '../../config/constants';
+import { TECH_STACK, TEAM_MEMBERS } from '../../config/team';
 import { createElement, createExternalLink } from '../dom';
 import { createGithubLink } from '../icons';
 
