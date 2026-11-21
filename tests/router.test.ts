@@ -1,6 +1,6 @@
-/** @file Тесты хэш-роутера. */
+/** @file Тесты хэш-роутера (services/router). */
 import { describe, expect, it } from 'vitest';
-import { getRouteHash, parseRoute } from './router';
+import { getRouteHash, parseRoute } from '../src/services/router';
 
 describe('parseRoute', () => {
   it('пустой хэш и корень ведут на главную', () => {

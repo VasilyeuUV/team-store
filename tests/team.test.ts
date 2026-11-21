@@ -1,14 +1,6 @@
-/** @file Тесты констант навигации и команды. */
+/** @file Тесты данных команды (config/team). */
 import { describe, expect, it } from 'vitest';
-import { NAV_ITEMS, TEAM_MEMBERS } from './constants';
-
-describe('NAV_ITEMS', () => {
-  it('содержит каталог и страницу «О нас» без дублей', () => {
-    const routes = NAV_ITEMS.map((item) => item.route);
-    expect(routes).toEqual(['home', 'about']);
-    expect(new Set(routes).size).toBe(routes.length);
-  });
-});
+import { TEAM_MEMBERS, TECH_STACK } from '../src/config/team';
 
 describe('TEAM_MEMBERS', () => {
   it('содержит реальных участников с логинами GitHub и ролями', () => {
@@ -17,5 +9,12 @@ describe('TEAM_MEMBERS', () => {
       expect(member.name.length).toBeGreaterThan(0);
       expect(member.role.length).toBeGreaterThan(0);
     });
+  });
+});
+
+describe('TECH_STACK', () => {
+  it('не пустой и без повторов', () => {
+    expect(TECH_STACK.length).toBeGreaterThan(0);
+    expect(new Set(TECH_STACK).size).toBe(TECH_STACK.length);
   });
 });
