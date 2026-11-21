@@ -1,8 +1,8 @@
 /** @file Тесты маппинга DTO в домен. */
 
 import { describe, expect, it } from 'vitest';
-import { mapProduct } from './map-dummy-product';
-import type { ProductDummyJsonDto } from './product-dummyjson-dto';
+import { mapProduct } from '../src/data/api/map-dummy-product';
+import type { ProductDummyJsonDto } from '../src/data/api/product-dummyjson-dto';
 
 const dto: ProductDummyJsonDto = {
   id: 7,

@@ -1,7 +1,7 @@
 /** @file Проверка целостности фикстур. */
 
 import { expect, it } from 'vitest';
-import { PRODUCTS_FIXTURE } from './dummyjson-products.fixture';
+import { PRODUCTS_FIXTURE } from '../src/data/fixtures/dummyjson-products.fixture';
 
 it('Содержит 12 товаров в 4 категориях с положительной ценой', () => {
   expect(PRODUCTS_FIXTURE).toHaveLength(12);
