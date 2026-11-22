@@ -1,5 +1,7 @@
 /**
- * @file Доменные типы предметной области магазина (товары, корзина и т.п.).
- * Слой не зависит от config/, services/ и ui/. Типы появятся в задачах каталога и корзины.
+ * @file Реэкспорт доменных типов предметной области магазина (товары и корзина).
+ * Слой не зависит от config/, services/ и ui/.
  */
-export {};
+
+export type { Category, Product } from './product';
+export type { CartItem, CartLine, CartProductInput, CartTotals } from './cart';
