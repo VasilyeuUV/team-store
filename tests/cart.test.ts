@@ -1,14 +1,29 @@
-/** @file Unit-тесты чистых функций бизнес-логики корзины (TDD: шаг Red). */
+/** @file Unit-тесты бизнес-логики корзины, расчёта промокода и работы с localStorage. */
 
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import type { CartItem, CartProductInput } from '../src/domain/cart';
 import {
+  CART_STORAGE_KEY,
   addCartItem,
+  addProductToCart,
   calcCart,
+  calcCartCount,
   calcCartLine,
+  changeCartItemQuantity,
+  clearCart,
+  formatPriceCents,
+  getCartCount,
+  getCartTotals,
+  loadCartItems,
+  parseStoredCartItems,
   removeCartItem,
+  removeProductFromCart,
+  saveCartItems,
+  setCartPromoCode,
+  subscribeToCart,
   updateCartItemQuantity,
 } from '../src/services/cart';
+import type { CartStorage } from '../src/services/cart';
 
 const phone: CartProductInput = {
   id: 1,
@@ -104,7 +119,7 @@ describe('updateCartItemQuantity и removeCartItem', () => {
   });
 });
 
-describe('calcCartLine и calcCart', () => {
+describe('calcCartLine, calcCart, calcCartCount и formatPriceCents', () => {
   it('рассчитывает lineTotalCents строки и итоговые суммы в целых копейках для нескольких товаров', () => {
     const items: readonly CartItem[] = [
       { ...phone, quantity: 2 },
@@ -116,6 +131,7 @@ describe('calcCartLine и calcCart', () => {
       quantity: 2,
       lineTotalCents: 119998,
     });
+    expect(calcCartCount(items)).toBe(5);
 
     const totals = calcCart(items);
     expect(totals.lines).toEqual([
@@ -139,6 +155,7 @@ describe('calcCartLine и calcCart', () => {
     expect(totals.totalCents).toBe(0);
     expect(totals.isPromoApplied).toBe(false);
     expect(totals.isPromoInvalid).toBe(false);
+    expect(calcCartCount([])).toBe(0);
   });
 
   it('применяет промокод SALE10 (−10% с округлением до целых копеек) и не накапливает скидку повторно', () => {
@@ -152,7 +169,7 @@ describe('calcCartLine и calcCart', () => {
     expect(firstApply.isPromoApplied).toBe(true);
     expect(firstApply.isPromoInvalid).toBe(false);
 
-    const secondApply = calcCart(items, 'SALE10');
+    const secondApply = calcCart(items, ' sale10 ');
     expect(secondApply.discountCents).toBe(33);
     expect(secondApply.totalCents).toBe(300);
   });
@@ -167,5 +184,78 @@ describe('calcCartLine и calcCart', () => {
     expect(totals.appliedPromoCode).toBeNull();
     expect(totals.isPromoApplied).toBe(false);
     expect(totals.isPromoInvalid).toBe(true);
+  });
+
+  it('форматирует суммы в целых копейках в строку валюты', () => {
+    expect(formatPriceCents(0)).toBe('$0.00');
+    expect(formatPriceCents(59999)).toBe('$599.99');
+    expect(formatPriceCents(105)).toBe('$1.05');
+  });
+});
+
+describe('localStorage и состояние корзины', () => {
+  beforeEach(() => {
+    clearCart();
+  });
+
+  it('сохраняет и загружает позиции корзины из хранилища', () => {
+    const memory = new Map<string, string>();
+    const storage: CartStorage = {
+      getItem: (key) => memory.get(key) ?? null,
+      setItem: (key, value) => {
+        memory.set(key, value);
+      },
+    };
+
+    const items: readonly CartItem[] = [
+      { ...phone, quantity: 2 },
+      { ...laptop, quantity: 1, imageUrl: 'https://example.com/laptop.png' },
+    ];
+
+    saveCartItems(items, storage);
+    expect(memory.has(CART_STORAGE_KEY)).toBe(true);
+    expect(loadCartItems(storage)).toEqual(items);
+  });
+
+  it('безопасно обрабатывает битый JSON и невалидные записи в localStorage', () => {
+    expect(parseStoredCartItems(null)).toEqual([]);
+    expect(parseStoredCartItems('')).toEqual([]);
+    expect(parseStoredCartItems('{broken json')).toEqual([]);
+    expect(parseStoredCartItems('{"not":"an array"}')).toEqual([]);
+
+    const mixedRaw = JSON.stringify([
+      { id: 1, title: 'Смартфон X', priceCents: 59999, quantity: 2 },
+      { id: -5, title: 'Битый ID', priceCents: 100, quantity: 1 },
+      { id: 2, title: '', priceCents: 100, quantity: 1 },
+      { id: 3, title: 'Отрицательное количество', priceCents: 100, quantity: 0 },
+      { id: 1, title: 'Смартфон X', priceCents: 59999, quantity: 1 },
+    ]);
+
+    expect(parseStoredCartItems(mixedRaw)).toEqual([
+      { id: 1, title: 'Смартфон X', priceCents: 59999, quantity: 3 },
+    ]);
+  });
+
+  it('управляет состоянием корзины и уведомляет подписчиков', () => {
+    let notifiedCount = 0;
+    const unsubscribe = subscribeToCart(() => {
+      notifiedCount += 1;
+    });
+
+    addProductToCart(phone);
+    addProductToCart(phone);
+    expect(getCartCount()).toBe(2);
+
+    changeCartItemQuantity(phone.id, -5);
+    expect(getCartCount()).toBe(1);
+
+    setCartPromoCode('SALE10');
+    expect(getCartTotals().isPromoApplied).toBe(true);
+
+    removeProductFromCart(phone.id);
+    expect(getCartCount()).toBe(0);
+    expect(notifiedCount).toBe(5);
+
+    unsubscribe();
   });
 });

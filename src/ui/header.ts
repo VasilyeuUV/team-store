@@ -1,7 +1,8 @@
-/** @file Шапка страницы: логотип, навигация и ссылка на корзину. */
+/** @file Шапка страницы: логотип, навигация и ссылка на корзину со счётчиком товаров. */
 import type { AppRoute } from '../config/routes';
 import { APP_TITLE } from '../config/constants';
 import { NAV_ITEMS } from '../config/navigation';
+import { getCartCount } from '../services/cart';
 import { getRouteHash } from '../services/router';
 import { createElement } from './dom';
 
@@ -38,11 +39,24 @@ export function createHeader(activeRoute: AppRoute): HTMLElement {
     [navList],
   );
 
-  const cartLink = createElement('a', {
-    className: 'nav__link header__cart',
-    text: 'Корзина',
-    attrs: { href: getRouteHash('cart'), 'data-route': 'cart' },
+  const initialCount = getCartCount();
+  const cartBadge = createElement('span', {
+    className: 'header__cart-badge',
+    text: String(initialCount),
+    attrs: {
+      'data-cart-badge': '',
+      'aria-label': `Товаров в корзине: ${initialCount}`,
+    },
   });
+
+  const cartLink = createElement(
+    'a',
+    {
+      className: 'nav__link header__cart',
+      attrs: { href: getRouteHash('cart'), 'data-route': 'cart' },
+    },
+    [createElement('span', { text: 'Корзина' }), cartBadge],
+  );
 
   const header = createElement('header', { className: 'header' }, [
     createElement('div', { className: 'container header__inner' }, [logo, nav, cartLink]),
@@ -50,6 +64,19 @@ export function createHeader(activeRoute: AppRoute): HTMLElement {
 
   setActiveNavLink(header, activeRoute);
   return header;
+}
+
+/**
+ * Обновляет счётчик количества товаров на ссылке «Корзина» в шапке.
+ * @param header элемент шапки, созданный `createHeader`
+ * @param count общее количество единиц товаров в корзине
+ */
+export function updateHeaderCartCount(header: HTMLElement, count: number): void {
+  const badge = header.querySelector<HTMLElement>('[data-cart-badge]');
+  if (badge !== null) {
+    badge.textContent = String(count);
+    badge.setAttribute('aria-label', `Товаров в корзине: ${count}`);
+  }
 }
 
 /**
