@@ -31,7 +31,7 @@ export async function fetchProducts(
 
   const payload: unknown = await response.json();
   const products = (payload as { products?: readonly ProductDummyJsonDto[] }).products ?? [];
-  const allowedCategories = new Set(CATEGORIES.map((category) => category.slug));
+  const allowedCategories = new Set<string>(CATEGORIES.map((cat) => cat.slug));
 
   return products.filter((dto) => allowedCategories.has(dto.category)).map(mapProduct);
 }
