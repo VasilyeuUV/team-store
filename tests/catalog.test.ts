@@ -44,4 +44,18 @@ describe('filterProducts', () => {
     const result = filterProducts(products, { ...noFilters, category: 'laptops' });
     expect(result.map((product) => product.id)).toEqual([3]);
   });
+
+  it('учитывает границы цены включительно', () => {
+    const result = filterProducts(products, {
+      ...noFilters,
+      minPriceCents: 79900,
+      maxPriceCents: 79900,
+    });
+    expect(result.map((product) => product.id)).toEqual([2]);
+  });
+
+  it('не применяет пустую верхнюю границу цены', () => {
+    const result = filterProducts(products, { ...noFilters, minPriceCents: 60000 });
+    expect(result.map((product) => product.id)).toEqual([1, 2, 3]);
+  });
 });
