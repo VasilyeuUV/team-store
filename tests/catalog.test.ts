@@ -1,8 +1,9 @@
 /** @file Тесты сервиса каталога. */
 
 import { describe, expect, it } from 'vitest';
-import { filterProducts } from '../src/services/catalog';
+
 import type { Product } from '../src/domain/product';
+import { filterProducts, sortProducts } from '../src/services/catalog';
 
 const makeProduct = (id: number, title: string, category: string, priceCents: number): Product => ({
   id,
@@ -12,7 +13,8 @@ const makeProduct = (id: number, title: string, category: string, priceCents: nu
   imageUrl: '',
 });
 
-const laptops = 'laptops';
+const laptops: string = 'laptops';
+const defaultIdProducts: number[] = [1, 2, 3, 4];
 
 const products: Product[] = [
   makeProduct(1, 'iPhone 15', 'smartphones', 99900),
@@ -72,6 +74,12 @@ describe('filterProducts', () => {
 
   it('не мутирует исходный массив товаров', () => {
     filterProducts(products, { ...noFilters, category: laptops });
-    expect(products.map((p) => p.id)).toEqual([1, 2, 3, 4]);
+    expect(products.map((p) => p.id)).toEqual(defaultIdProducts);
+  });
+});
+
+describe(sortProducts.name, () => {
+  it('сохраняет исходный порядок при sort = default', () => {
+    expect(sortProducts(products, 'default').map((p) => p.id)).toEqual(defaultIdProducts);
   });
 });

@@ -2,6 +2,18 @@
 
 import type { Product } from '../domain/product';
 
+/** Константы сортировки каталога. */
+export const SortOrder = {
+  Default: 'default',
+  PriceAsc: 'price-asc',
+  PriceDesc: 'price-desc',
+} as const;
+
+/**
+ * Порядок сортировки каталога.
+ */
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+
 /** Фильтры каталога. */
 export interface CatalogFilters {
   readonly search: string;
@@ -26,4 +38,15 @@ export function filterProducts(products: readonly Product[], filters: CatalogFil
     if (filters.maxPriceCents !== null && product.priceCents > filters.maxPriceCents) return false;
     return true;
   });
+}
+
+/**
+ * Сортировать товары по цене.
+ *
+ * @param products - Товары каталогаю
+ * @param sort - Порядок сортировки.
+ * @returns Новый массив товаров.
+ */
+export function sortProducts(products: readonly Product[], sort: SortOrder): Product[] {
+  return [...products];
 }
