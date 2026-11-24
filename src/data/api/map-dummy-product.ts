@@ -15,5 +15,6 @@ export function mapProduct(dto: ProductDummyJsonDto): Product {
     priceCents: Math.round(dto.price * 100),
     category: dto.category,
     imageUrl: dto.thumbnail,
+    stock: Math.max(0, Math.trunc(dto.stock ?? 0)),
   };
 }

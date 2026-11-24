@@ -17,6 +17,7 @@ describe(fetchProducts.name, () => {
     expect(products).toHaveLength(12);
     expect(new Set(products.map((p) => p.category)).size).toBe(4);
     products.forEach((p) => expect(p.priceCents).toBeGreaterThan(0));
+    products.forEach((p) => expect(p.stock).toBeGreaterThanOrEqual(0));
   });
 
   it('в режиме api загружает DTO, фильтрует по ассортименту и мапит в домен', async () => {
@@ -31,6 +32,7 @@ describe(fetchProducts.name, () => {
             category: 'smartphones',
             price: 100,
             thumbnail: 'u1',
+            stock: 5,
           },
           {
             id: 2,
@@ -39,6 +41,7 @@ describe(fetchProducts.name, () => {
             category: 'furniture',
             price: 200,
             thumbnail: 'u2',
+            stock: 3,
           },
         ],
       }),
@@ -49,7 +52,14 @@ describe(fetchProducts.name, () => {
 
     expect(fetchMock).toHaveBeenCalledOnce();
     expect(products).toEqual([
-      { id: 1, title: 'Phone', priceCents: 10000, category: 'smartphones', imageUrl: 'u1' },
+      {
+        id: 1,
+        title: 'Phone',
+        priceCents: 10000,
+        category: 'smartphones',
+        imageUrl: 'u1',
+        stock: 5,
+      },
     ]);
   });
 

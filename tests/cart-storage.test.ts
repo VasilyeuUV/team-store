@@ -13,6 +13,7 @@ const phone: Product = {
   priceCents: 59999,
   category: 'smartphones',
   imageUrl: 'https://example.com/phone.png',
+  stock: 10,
 };
 
 const laptop: Product = {
@@ -21,6 +22,7 @@ const laptop: Product = {
   priceCents: 129999,
   category: 'laptops',
   imageUrl: 'https://example.com/laptop.png',
+  stock: 5,
 };
 
 describe('cart-storage', () => {
@@ -59,5 +61,22 @@ describe('cart-storage', () => {
     ]);
 
     expect(parseStoredCartItems(mixedRaw)).toEqual([{ product: phone, quantity: 3 }]);
+  });
+
+  it('подставляет stock = 0, если в сохранённых данных его нет', () => {
+    const legacy = JSON.stringify([
+      {
+        product: {
+          id: 1,
+          title: 'Смартфон X',
+          priceCents: 59999,
+          category: 'smartphones',
+          imageUrl: '',
+        },
+        quantity: 1,
+      },
+    ]);
+
+    expect(parseStoredCartItems(legacy)[0]?.product.stock).toBe(0);
   });
 });

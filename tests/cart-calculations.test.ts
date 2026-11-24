@@ -18,6 +18,7 @@ const phone: Product = {
   priceCents: 59999,
   category: 'smartphones',
   imageUrl: 'https://example.com/phone.png',
+  stock: 10,
 };
 
 const laptop: Product = {
@@ -26,6 +27,7 @@ const laptop: Product = {
   priceCents: 129999,
   category: 'laptops',
   imageUrl: 'https://example.com/laptop.png',
+  stock: 5,
 };
 
 const cable: Product = {
@@ -34,6 +36,7 @@ const cable: Product = {
   priceCents: 333,
   category: 'mobile-accessories',
   imageUrl: 'https://example.com/cable.png',
+  stock: 3,
 };
 
 describe('addCartItem', () => {
@@ -72,6 +75,21 @@ describe('addCartItem', () => {
     expect(initial[0]?.quantity).toBe(1);
     expect(updated[0]?.quantity).toBe(2);
   });
+
+  it('не добавляет товар, которого нет на складе', () => {
+    const outOfStock: Product = { ...phone, id: 9, stock: 0 };
+
+    expect(addCartItem([], outOfStock)).toEqual([]);
+  });
+
+  it('не увеличивает количество выше остатка на складе', () => {
+    const limited: Product = { ...phone, id: 8, stock: 2 };
+    const first = addCartItem([], limited);
+    const second = addCartItem(first, limited);
+    const third = addCartItem(second, limited);
+
+    expect(third).toEqual([{ product: limited, quantity: 2 }]);
+  });
 });
 
 describe('updateCartItemQuantity и removeCartItem', () => {
@@ -103,6 +121,14 @@ describe('updateCartItemQuantity и removeCartItem', () => {
 
     const afterRemove = removeCartItem(initial, phone.id);
     expect(afterRemove).toEqual([{ product: laptop, quantity: 1 }]);
+  });
+
+  it('не поднимает количество выше остатка на складе', () => {
+    const limited: Product = { ...phone, id: 8, stock: 2 };
+    const items: readonly CartItem[] = [{ product: limited, quantity: 1 }];
+
+    expect(updateCartItemQuantity(items, limited.id, 1)[0]?.quantity).toBe(2);
+    expect(updateCartItemQuantity(items, limited.id, 5)[0]?.quantity).toBe(2);
   });
 });
 

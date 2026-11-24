@@ -16,6 +16,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     category: 'smartphones',
     price: 299.99,
     thumbnail: 'https://cdn.dummyjson.com/product-images/smartphones/realme-x/thumbnail.webp',
+    stock: 5,
   },
   {
     id: 133,
@@ -26,6 +27,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 699.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s10/thumbnail.webp',
+    stock: 11,
   },
   {
     id: 134,
@@ -35,6 +37,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     category: 'smartphones',
     price: 249.99,
     thumbnail: 'https://cdn.dummyjson.com/product-images/smartphones/vivo-s1/thumbnail.webp',
+    stock: 0,
   },
 
   // ── laptops ──────────────────────────────────────────────────
@@ -47,6 +50,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 1999.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/thumbnail.webp',
+    stock: 2,
   },
   {
     id: 79,
@@ -57,6 +61,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 1799.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp',
+    stock: 3,
   },
   {
     id: 80,
@@ -67,6 +72,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 1399.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/thumbnail.webp',
+    stock: 4,
   },
 
   // ── tablets ──────────────────────────────────────────────────
@@ -79,6 +85,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 499.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/thumbnail.webp',
+    stock: 8,
   },
   {
     id: 160,
@@ -89,6 +96,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 599.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/thumbnail.webp',
+    stock: 14,
   },
   {
     id: 161,
@@ -99,6 +107,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 349.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-white/thumbnail.webp',
+    stock: 7,
   },
 
   // ── mobile-accessories ───────────────────────────────────────
@@ -111,6 +120,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 99.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/thumbnail.webp',
+    stock: 16,
   },
   {
     id: 100,
@@ -121,6 +131,7 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 129.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/thumbnail.webp',
+    stock: 26,
   },
   {
     id: 101,
@@ -131,5 +142,6 @@ export const PRODUCTS_FIXTURE: readonly ProductDummyJsonDto[] = [
     price: 549.99,
     thumbnail:
       'https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods-max-silver/thumbnail.webp',
+    stock: 36,
   },
 ];

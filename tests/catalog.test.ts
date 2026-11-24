@@ -5,12 +5,19 @@ import { describe, expect, it } from 'vitest';
 import type { Product } from '../src/domain/product';
 import { filterProducts, SortOrder, sortProducts, applyCatalog } from '../src/services/catalog';
 
-const makeProduct = (id: number, title: string, category: string, priceCents: number): Product => ({
+const makeProduct = (
+  id: number,
+  title: string,
+  category: string,
+  priceCents: number,
+  stock = 10,
+): Product => ({
   id,
   title,
   priceCents,
   category,
   imageUrl: '',
+  stock,
 });
 
 const laptops: string = 'laptops';

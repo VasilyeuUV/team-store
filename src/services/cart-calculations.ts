@@ -21,16 +21,22 @@ export function addCartItem(
   product: Product,
   quantity = MIN_CART_QUANTITY,
 ): CartItem[] {
-  const addedQuantity = Math.max(MIN_CART_QUANTITY, Math.trunc(quantity));
-  const hasExistingItem = items.some((item) => item.product.id === product.id);
+  const maxQuantity = getMaxCartQuantity(product);
+  if (maxQuantity === 0) {
+    return [...items];
+  }
 
-  if (hasExistingItem) {
+  const addedQuantity = Math.max(MIN_CART_QUANTITY, Math.trunc(quantity));
+  const existingItem = items.find((item) => item.product.id === product.id);
+
+  if (existingItem) {
+    const nextQuantity = Math.min(existingItem.quantity + addedQuantity, maxQuantity);
     return items.map((item) =>
-      item.product.id === product.id ? { ...item, quantity: item.quantity + addedQuantity } : item,
+      item.product.id === product.id ? { ...item, quantity: nextQuantity } : item,
     );
   }
 
-  return [...items, { product, quantity: addedQuantity }];
+  return [...items, { product, quantity: Math.min(addedQuantity, maxQuantity) }];
 }
 
 /**
@@ -52,7 +58,9 @@ export function updateCartItemQuantity(
       return item;
     }
 
-    const nextQuantity = Math.max(MIN_CART_QUANTITY, item.quantity + step);
+    const maxQuantity = Math.max(MIN_CART_QUANTITY, getMaxCartQuantity(item.product));
+    const nextQuantity = Math.min(Math.max(MIN_CART_QUANTITY, item.quantity + step), maxQuantity);
+
     return { ...item, quantity: nextQuantity };
   });
 }
@@ -118,4 +126,13 @@ export function calcCart(items: readonly CartItem[], promoCode?: string): CartTo
     isPromoApplied,
     isPromoInvalid,
   };
+}
+
+/**
+ * Максимально допустимое количество товара в корзине по остатку.
+ * @param product товар
+ * @returns остаток (не меньше 0)
+ */
+export function getMaxCartQuantity(product: Product): number {
+  return Math.max(0, Math.trunc(product.stock));
 }
