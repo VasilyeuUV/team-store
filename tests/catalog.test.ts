@@ -30,4 +30,13 @@ describe('filterProducts', () => {
   it('возвращает все товары при пустых фильтрах', () => {
     expect(filterProducts(products, noFilters)).toEqual(products);
   });
+
+  it('находит товары по части названия без учёта регистра', () => {
+    const result = filterProducts(products, { ...noFilters, search: 'IPHONE' });
+    expect(result.map((product) => product.id)).toEqual([1]);
+  });
+
+  it('не отсеивает товары при поиске из одних пробелов', () => {
+    expect(filterProducts(products, { ...noFilters, search: '   ' })).toHaveLength(4);
+  });
 });

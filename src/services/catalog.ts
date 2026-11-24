@@ -11,7 +11,13 @@ export interface CatalogFilters {
 
 /**
  * Фильтровать товары.
+ *
+ * @param products
+ * @param filters
+ * @returns
  */
-export function filterProducts(products: readonly Product[], _filters: CatalogFilters): Product[] {
-  return [...products];
+export function filterProducts(products: readonly Product[], filters: CatalogFilters): Product[] {
+  const query = filters.search.trim().toLowerCase();
+
+  return products.filter((product) => query === '' || product.title.toLowerCase().includes(query));
 }
