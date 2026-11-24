@@ -1,12 +1,12 @@
 /** @file Каркас страницы: шапка, основная область и подвал с переключением страниц. */
 import type { AppRoute } from '../config/routes';
-import { getCartCount, subscribeToCart } from '../services/cart';
+import { getCartCount, subscribeToCart } from '../services/cart-store';
 import { getCurrentRoute, initRouter, subscribeToRoute } from '../services/router';
 import { createElement } from './dom';
 import { createFooter } from './footer';
 import { createHeader, setActiveNavLink, updateHeaderCartCount } from './header';
 import { renderAboutPage } from './pages/about';
-import { renderCartPage } from './pages/cart';
+import { renderCartPage } from './pages/cart-page';
 import { renderHomePage } from './pages/home';
 
 const PAGE_RENDERERS: Readonly<Record<AppRoute, () => HTMLElement>> = {

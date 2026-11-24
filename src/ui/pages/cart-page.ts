@@ -1,61 +1,35 @@
-/** @file Страница корзины: список позиций, управление количеством, промокод SALE10 и итоги. */
-import type { CartLine, CartProductInput, CartTotals } from '../../domain/cart';
+/** @file Страница корзины: список элементов, управление количеством, промокод SALE10 и итоги. */
+import type { CartLine } from '../../domain/cart-line';
+import type { CartTotals } from '../../domain/cart-totals';
+import { MIN_CART_QUANTITY } from '../../services/cart-calculations';
 import {
-  MIN_CART_QUANTITY,
-  addProductToCart,
   changeCartItemQuantity,
-  formatPriceCents,
   getCartPromoCode,
   getCartTotals,
   removeProductFromCart,
   setCartPromoCode,
-} from '../../services/cart';
+} from '../../services/cart-store';
 import { getRouteHash } from '../../services/router';
 import { createElement } from '../dom';
-
-/**
- * Создаёт кнопку «В корзину» для карточки товара каталога.
- * При клике добавляет товар через сервис корзины (увеличивает количество без дублей).
- * @param product данные товара
- * @param label текст кнопки (по умолчанию «В корзину»)
- * @returns элемент кнопки
- */
-export function createAddToCartButton(
-  product: CartProductInput,
-  label = 'В корзину',
-): HTMLButtonElement {
-  const button = createElement('button', {
-    className: 'btn btn--primary',
-    text: label,
-    attrs: {
-      type: 'button',
-      'data-add-to-cart': String(product.id),
-    },
-  });
-
-  button.addEventListener('click', () => {
-    addProductToCart(product);
-  });
-
-  return button;
-}
+import { formatPriceCents } from '../format';
 
 /**
  * Создаёт DOM-элемент одной строки товара в корзине.
  * @param line рассчитанная строка корзины
- * @param onUpdate колбэк перерисовки корзины после изменения позиции
+ * @param onUpdate колбэк перерисовки корзины после изменения элемента
  * @returns элемент `<li>`
  */
 function createCartLineItem(line: CartLine, onUpdate: () => void): HTMLElement {
+  const { product, quantity, lineTotalCents } = line;
   const children: Node[] = [];
 
-  if (line.imageUrl !== undefined && line.imageUrl.trim() !== '') {
+  if (product.imageUrl.trim() !== '') {
     children.push(
       createElement('img', {
         className: 'cart-item__image',
         attrs: {
-          src: line.imageUrl,
-          alt: line.title,
+          src: product.imageUrl,
+          alt: product.title,
           width: '64',
           height: '64',
           loading: 'lazy',
@@ -65,33 +39,33 @@ function createCartLineItem(line: CartLine, onUpdate: () => void): HTMLElement {
   }
 
   const info = createElement('div', { className: 'cart-item__info' }, [
-    createElement('h2', { className: 'cart-item__title', text: line.title }),
+    createElement('h2', { className: 'cart-item__title', text: product.title }),
     createElement('p', {
       className: 'cart-item__price',
-      text: `Цена за шт.: ${formatPriceCents(line.priceCents)}`,
+      text: `Цена за шт.: ${formatPriceCents(product.priceCents)}`,
     }),
   ]);
   children.push(info);
 
-  const isMinQuantity = line.quantity <= MIN_CART_QUANTITY;
+  const isMinQuantity = quantity <= MIN_CART_QUANTITY;
   const decreaseButton = createElement('button', {
     className: 'cart-item__qty-btn',
     text: '−',
     attrs: {
       type: 'button',
-      'aria-label': `Уменьшить количество «${line.title}»`,
+      'aria-label': `Уменьшить количество «${product.title}»`,
       ...(isMinQuantity ? { disabled: 'disabled' } : {}),
     },
   });
   decreaseButton.addEventListener('click', () => {
-    changeCartItemQuantity(line.id, -1);
+    changeCartItemQuantity(product.id, -1);
     onUpdate();
   });
 
   const quantityValue = createElement('span', {
     className: 'cart-item__qty-value',
-    text: String(line.quantity),
-    attrs: { 'aria-label': `Количество: ${line.quantity}` },
+    text: String(quantity),
+    attrs: { 'aria-label': `Количество: ${quantity}` },
   });
 
   const increaseButton = createElement('button', {
@@ -99,11 +73,11 @@ function createCartLineItem(line: CartLine, onUpdate: () => void): HTMLElement {
     text: '+',
     attrs: {
       type: 'button',
-      'aria-label': `Увеличить количество «${line.title}»`,
+      'aria-label': `Увеличить количество «${product.title}»`,
     },
   });
   increaseButton.addEventListener('click', () => {
-    changeCartItemQuantity(line.id, 1);
+    changeCartItemQuantity(product.id, 1);
     onUpdate();
   });
 
@@ -115,7 +89,7 @@ function createCartLineItem(line: CartLine, onUpdate: () => void): HTMLElement {
 
   const lineTotal = createElement('p', {
     className: 'cart-item__total',
-    text: formatPriceCents(line.lineTotalCents),
+    text: formatPriceCents(lineTotalCents),
   });
 
   const removeButton = createElement('button', {
@@ -123,11 +97,11 @@ function createCartLineItem(line: CartLine, onUpdate: () => void): HTMLElement {
     text: 'Удалить',
     attrs: {
       type: 'button',
-      'aria-label': `Удалить «${line.title}» из корзины`,
+      'aria-label': `Удалить «${product.title}» из корзины`,
     },
   });
   removeButton.addEventListener('click', () => {
-    removeProductFromCart(line.id);
+    removeProductFromCart(product.id);
     onUpdate();
   });
 
@@ -137,7 +111,7 @@ function createCartLineItem(line: CartLine, onUpdate: () => void): HTMLElement {
     'li',
     {
       className: 'cart-item',
-      attrs: { 'data-product-id': String(line.id) },
+      attrs: { 'data-product-id': String(product.id) },
     },
     children,
   );

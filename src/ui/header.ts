@@ -2,7 +2,7 @@
 import type { AppRoute } from '../config/routes';
 import { APP_TITLE } from '../config/constants';
 import { NAV_ITEMS } from '../config/navigation';
-import { getCartCount } from '../services/cart';
+import { getCartCount } from '../services/cart-store';
 import { getRouteHash } from '../services/router';
 import { createElement } from './dom';
 
