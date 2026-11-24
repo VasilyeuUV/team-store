@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { Product } from '../src/domain/product';
-import { filterProducts, SortOrder, sortProducts } from '../src/services/catalog';
+import { filterProducts, SortOrder, sortProducts, applyCatalog } from '../src/services/catalog';
 
 const makeProduct = (id: number, title: string, category: string, priceCents: number): Product => ({
   id,
@@ -94,5 +94,16 @@ describe(sortProducts.name, () => {
   it('не мутирует исходный массив', () => {
     sortProducts(products, SortOrder.PriceAsc);
     expect(products.map((p) => p.id)).toEqual(defaultIdProducts);
+  });
+});
+
+describe(applyCatalog.name, () => {
+  it('фильтрует и сортирует за один вызов', () => {
+    const result = applyCatalog(
+      products,
+      { ...noFilters, minPriceCents: 60000 },
+      SortOrder.PriceAsc,
+    );
+    expect(result.map((p) => p.id)).toEqual([2, 1, 3]);
   });
 });

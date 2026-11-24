@@ -43,7 +43,7 @@ export function filterProducts(products: readonly Product[], filters: CatalogFil
 /**
  * Сортировать товары по цене.
  *
- * @param products - Товары каталогаю
+ * @param products - Товары каталога.
  * @param sort - Порядок сортировки.
  * @returns Новый массив товаров.
  */
@@ -53,4 +53,19 @@ export function sortProducts(products: readonly Product[], sort: SortOrder): Pro
   if (sort === SortOrder.PriceDesc) result.sort((a, b) => b.priceCents - a.priceCents);
 
   return result;
+}
+
+/**
+ * Применить фильтр и сортировку к каталогу.
+ * @param products - Товары каталога.
+ * @param filters - Активные фильтры.
+ * @param sort - Порядок сортировки.
+ * @returns Новый массив товаров.
+ */
+export function applyCatalog(
+  products: readonly Product[],
+  filters: CatalogFilters,
+  sort: SortOrder,
+): Product[] {
+  return sortProducts(filterProducts(products, filters), sort);
 }
