@@ -25,7 +25,7 @@ const products: Product[] = [
 
 const noFilters = {
   search: '',
-  category: null,
+  categories: [],
   minPriceCents: null,
   maxPriceCents: null,
 };
@@ -45,7 +45,7 @@ describe('filterProducts', () => {
   });
 
   it('фильтрует по категории', () => {
-    const result = filterProducts(products, { ...noFilters, category: laptops });
+    const result = filterProducts(products, { ...noFilters, categories: [laptops] });
     expect(result.map((product) => product.id)).toEqual([3]);
   });
 
@@ -64,7 +64,7 @@ describe('filterProducts', () => {
   });
 
   it('применяет поиск и категорию одновременно', () => {
-    const result = filterProducts(products, { ...noFilters, search: 'air', category: laptops });
+    const result = filterProducts(products, { ...noFilters, search: 'air', categories: [laptops] });
     expect(result.map((p) => p.id)).toEqual([3]);
   });
 
@@ -73,8 +73,16 @@ describe('filterProducts', () => {
   });
 
   it('не мутирует исходный массив товаров', () => {
-    filterProducts(products, { ...noFilters, category: laptops });
+    filterProducts(products, { ...noFilters, categories: [laptops] });
     expect(products.map((p) => p.id)).toEqual(defaultIdProducts);
+  });
+
+  it('фильтрует по нескольким категориям', () => {
+    const result = filterProducts(products, {
+      ...noFilters,
+      categories: ['smartphones', 'tablets'],
+    });
+    expect(result.map((product) => product.id)).toEqual([1, 2, 4]);
   });
 });
 

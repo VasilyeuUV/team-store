@@ -17,7 +17,7 @@ export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 /** Фильтры каталога. */
 export interface CatalogFilters {
   readonly search: string;
-  readonly category: string | null;
+  readonly categories: readonly string[];
   readonly minPriceCents: number | null;
   readonly maxPriceCents: number | null;
 }
@@ -33,7 +33,9 @@ export function filterProducts(products: readonly Product[], filters: CatalogFil
 
   return products.filter((product) => {
     if (query !== '' && !product.title.toLowerCase().includes(query)) return false;
-    if (filters.category !== null && product.category !== filters.category) return false;
+    if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
+      return false;
+    }
     if (filters.minPriceCents !== null && product.priceCents < filters.minPriceCents) return false;
     if (filters.maxPriceCents !== null && product.priceCents > filters.maxPriceCents) return false;
     return true;

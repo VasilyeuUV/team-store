@@ -7,10 +7,10 @@ import { createFooter } from './footer';
 import { createHeader, setActiveNavLink, updateHeaderCartCount } from './header';
 import { renderAboutPage } from './pages/about';
 import { renderCartPage } from './pages/cart-page';
-import { renderHomePage } from './pages/home';
+import { renderCatalogPage } from './pages/catalog-page';
 
 const PAGE_RENDERERS: Readonly<Record<AppRoute, () => HTMLElement>> = {
-  home: renderHomePage,
+  home: renderCatalogPage,
   about: renderAboutPage,
   cart: renderCartPage,
 };
