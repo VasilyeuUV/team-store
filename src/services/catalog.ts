@@ -48,5 +48,9 @@ export function filterProducts(products: readonly Product[], filters: CatalogFil
  * @returns Новый массив товаров.
  */
 export function sortProducts(products: readonly Product[], sort: SortOrder): Product[] {
-  return [...products];
+  const result = [...products];
+  if (sort === SortOrder.PriceAsc) result.sort((a, b) => a.priceCents - b.priceCents);
+  if (sort === SortOrder.PriceDesc) result.sort((a, b) => b.priceCents - a.priceCents);
+
+  return result;
 }
