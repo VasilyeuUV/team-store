@@ -23,5 +23,15 @@ export async function fetchProducts(
     return getMockProducts();
   }
 
-  throw new Error('API-источник пока не реализован');
+  const response = await fetch(`${API_BASE_URL}/products?limit=0`, { signal });
+
+  if (!response.ok) {
+    throw new Error(`Не удалось загрузить товары: HTTP ${response.status}`);
+  }
+
+  const payload: unknown = await response.json();
+  const products = (payload as { products?: readonly ProductDummyJsonDto[] }).products ?? [];
+  const allowedCategories = new Set(CATEGORIES.map((category) => category.slug));
+
+  return products.filter((dto) => allowedCategories.has(dto.category)).map(mapProduct);
 }
