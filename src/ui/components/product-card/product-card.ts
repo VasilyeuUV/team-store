@@ -1,10 +1,11 @@
 /** @file Карточка товара каталога. */
 
-import { CATEGORIES } from '../../config/constants';
-import type { Product } from '../../domain/product';
-import { createElement } from '../dom';
-import { formatPriceCents } from '../format';
-import { createAddToCartButton } from './add-to-cart-button';
+import { CATEGORIES } from '../../../config/constants';
+import type { Product } from '../../../domain/product';
+import { createElement } from '../../dom';
+import { formatPriceCents } from '../../format';
+import { createAddToCartButton } from '../add-to-cart-button/add-to-cart-button';
+import './product-card.css';
 
 /**
  * Создаёт карточку товара.

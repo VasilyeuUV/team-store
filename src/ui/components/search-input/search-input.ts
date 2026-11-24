@@ -1,6 +1,7 @@
 /** @file Поле поиска каталога. */
 
-import { createElement } from '../dom';
+import { createElement } from '../../dom';
+import './search-input.css';
 
 /** Публичный интерфейс поля поиска. */
 export interface CatalogSearch {

@@ -1,6 +1,7 @@
 /** @file Компонент диапазона цен: числовые поля и двойной ползунок. */
 
-import { createElement } from '../dom';
+import { createElement } from '../../dom';
+import './price-range.css';
 
 /** Значения диапазона в копейках. */
 export interface PriceRangeValues {

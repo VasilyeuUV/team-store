@@ -1,8 +1,9 @@
 /** @file Сетка товаров каталога с состояниями загрузки и пустоты. */
 
-import type { Product } from '../../domain/product';
-import { createElement } from '../dom';
-import { createProductCard } from './product-card';
+import type { Product } from '../../../domain/product';
+import { createElement } from '../../dom';
+import { createProductCard } from '../product-card/product-card';
+import './catalog-grid.css';
 
 /** Публичный интерфейс сетки. */
 export interface CatalogGrid {

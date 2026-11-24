@@ -1,13 +1,14 @@
 /** @file Страница каталога: загрузка товаров и компоновка частей. */
 
-import { fetchProducts } from '../../data/api/products';
-import type { Product } from '../../domain/product';
-import { applyCatalog } from '../../services/catalog';
-import type { CatalogFilters } from '../../services/catalog';
-import { createCatalogFilters } from '../components/catalog-filters';
-import { createCatalogGrid } from '../components/catalog-grid';
-import { createCatalogSearch } from '../components/search-input';
-import { createElement } from '../dom';
+import { fetchProducts } from '../../../data/api/products';
+import type { Product } from '../../../domain/product';
+import { applyCatalog } from '../../../services/catalog';
+import type { CatalogFilters } from '../../../services/catalog';
+import { createCatalogFilters } from '../../components/catalog-filters/catalog-filters';
+import { createCatalogGrid } from '../../components/catalog-grid/catalog-grid';
+import { createCatalogSearch } from '../../components/search-input/search-input';
+import { createElement } from '../../dom';
+import './catalog-page.css';
 
 /** Создаёт страницу каталога. */
 export function renderCatalogPage(): HTMLElement {

@@ -1,14 +1,14 @@
 /** @file Переиспользуемая кнопка добавления товара в корзину. */
 
-import type { Product } from '../../domain/product';
-import { addProductToCart } from '../../services/cart-store';
-import { createElement } from '../dom';
+import type { Product } from '../../../domain/product';
+import { addProductToCart, getCartItems } from '../../../services/cart-store';
+import { createElement } from '../../dom';
 
 /**
  * Создаёт кнопку «В корзину» для карточки товара каталога.
- * При клике добавляет товар через стор корзины (увеличивает количество без дублей).
+ * Показывает количество товара в корзине и учитывает остаток на складе.
  * @param product товар из каталога
- * @param label текст кнопки (по умолчанию «В корзину»)
+ * @param label текст кнопки, когда товара нет в корзине
  * @returns элемент кнопки
  */
 export function createAddToCartButton(product: Product, label = 'В корзину'): HTMLButtonElement {
@@ -21,9 +21,26 @@ export function createAddToCartButton(product: Product, label = 'В корзин
     },
   });
 
+  const cartQuantity = (): number =>
+    getCartItems().find((item) => item.product.id === product.id)?.quantity ?? 0;
+
+  const renderLabel = (): void => {
+    if (product.stock === 0) {
+      button.textContent = 'Нет в наличии';
+      button.disabled = true;
+      return;
+    }
+
+    const quantity = cartQuantity();
+    button.textContent = quantity > 0 ? `В корзине: ${quantity}` : label;
+  };
+
   button.addEventListener('click', () => {
     addProductToCart(product);
+    renderLabel();
   });
+
+  renderLabel();
 
   return button;
 }

@@ -1,7 +1,33 @@
 /** @file Комбобокс категорий: выпадающий список с чекбоксами. */
 
-import type { Category } from '../../domain/product';
-import { createElement } from '../dom';
+import type { Category } from '../../../domain/product';
+import { createElement } from '../../dom';
+import './category-combobox.css';
+
+/** Открытые комбобоксы — для закрытия по клику вне. */
+const openComboboxes = new Set<HTMLDetailsElement>();
+let outsideListenerBound = false;
+
+/** Подписывает документ на закрытие комбобоксов по клику вне (один раз). */
+function bindOutsideClickClose(): void {
+  if (outsideListenerBound) return;
+  outsideListenerBound = true;
+
+  document.addEventListener('pointerdown', (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+
+    openComboboxes.forEach((details) => {
+      if (!details.isConnected) {
+        openComboboxes.delete(details);
+        return;
+      }
+      if (!details.contains(target)) {
+        details.removeAttribute('open');
+      }
+    });
+  });
+}
 
 /** Публичный интерфейс комбобокса. */
 export interface CategoryCombobox {
@@ -47,6 +73,9 @@ export function createCategoryCombobox(
   ]);
 
   const details = createElement('details', { className: 'combobox' }, [summary, panel]);
+
+  bindOutsideClickClose();
+  openComboboxes.add(details);
 
   const updateSummary = (): void => {
     const selected = checkboxes.filter(({ input }) => input.checked);

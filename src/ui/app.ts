@@ -7,7 +7,7 @@ import { createFooter } from './footer';
 import { createHeader, setActiveNavLink, updateHeaderCartCount } from './header';
 import { renderAboutPage } from './pages/about';
 import { renderCartPage } from './pages/cart-page';
-import { renderCatalogPage } from './pages/catalog-page';
+import { renderCatalogPage } from './pages/catalog-page/catalog-page';
 
 const PAGE_RENDERERS: Readonly<Record<AppRoute, () => HTMLElement>> = {
   home: renderCatalogPage,

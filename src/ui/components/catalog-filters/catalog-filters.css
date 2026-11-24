@@ -1,0 +1,27 @@
+.catalog__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  position: sticky;
+  top: var(--gutter);
+}
+
+.catalog__aside .btn {
+  margin-top: auto;
+}
+
+.catalog__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-md);
+}
+
+@media (max-width: 768px) {
+  .catalog__aside {
+    position: static;
+  }
+}
