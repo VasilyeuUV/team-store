@@ -39,4 +39,9 @@ describe('filterProducts', () => {
   it('не отсеивает товары при поиске из одних пробелов', () => {
     expect(filterProducts(products, { ...noFilters, search: '   ' })).toHaveLength(4);
   });
+
+  it('фильтрует по категории', () => {
+    const result = filterProducts(products, { ...noFilters, category: 'laptops' });
+    expect(result.map((product) => product.id)).toEqual([3]);
+  });
 });
