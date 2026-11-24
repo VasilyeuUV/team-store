@@ -12,10 +12,12 @@ const makeProduct = (id: number, title: string, category: string, priceCents: nu
   imageUrl: '',
 });
 
+const laptops = 'laptops';
+
 const products: Product[] = [
   makeProduct(1, 'iPhone 15', 'smartphones', 99900),
   makeProduct(2, 'Galaxy S24', 'smartphones', 79900),
-  makeProduct(3, 'MacBook Air', 'laptops', 119900),
+  makeProduct(3, 'MacBook Air', laptops, 119900),
   makeProduct(4, 'iPad Air', 'tablets', 59900),
 ];
 
@@ -41,7 +43,7 @@ describe('filterProducts', () => {
   });
 
   it('фильтрует по категории', () => {
-    const result = filterProducts(products, { ...noFilters, category: 'laptops' });
+    const result = filterProducts(products, { ...noFilters, category: laptops });
     expect(result.map((product) => product.id)).toEqual([3]);
   });
 
@@ -57,5 +59,19 @@ describe('filterProducts', () => {
   it('не применяет пустую верхнюю границу цены', () => {
     const result = filterProducts(products, { ...noFilters, minPriceCents: 60000 });
     expect(result.map((product) => product.id)).toEqual([1, 2, 3]);
+  });
+
+  it('применяет поиск и категорию одновременно', () => {
+    const result = filterProducts(products, { ...noFilters, search: 'air', category: laptops });
+    expect(result.map((p) => p.id)).toEqual([3]);
+  });
+
+  it('возвращает пустой массив, если совпадений нет', () => {
+    expect(filterProducts(products, { ...noFilters, search: 'несуществующий' })).toEqual([]);
+  });
+
+  it('не мутирует исходный массив товаров', () => {
+    filterProducts(products, { ...noFilters, category: laptops });
+    expect(products.map((p) => p.id)).toEqual([1, 2, 3, 4]);
   });
 });
