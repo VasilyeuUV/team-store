@@ -3,7 +3,8 @@
 import { describe, expect, it } from 'vitest';
 
 import type { Product } from '../src/domain/product';
-import { filterProducts, SortOrder, sortProducts, applyCatalog } from '../src/services/catalog';
+import { SortOrder } from '../src/config/constants';
+import { filterProducts, sortProducts, applyCatalog } from '../src/services/catalog';
 
 const makeProduct = (
   id: number,

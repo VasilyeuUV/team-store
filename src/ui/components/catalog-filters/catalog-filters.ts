@@ -1,7 +1,7 @@
 /** @file Панель фильтров каталога (aside) и сортировка. */
 
 import { CATEGORIES } from '../../../config/constants';
-import { SortOrder } from '../../../services/catalog';
+import { SortOrder } from '../../../config/constants';
 import { createElement } from '../../dom';
 import { createCategoryCombobox } from '../category-combobox/category-combobox';
 import { createPriceRange } from '../price-range/price-range';

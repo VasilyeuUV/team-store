@@ -27,3 +27,13 @@ export const REPO_URL = 'https://github.com/VasilyeuUV/team-store';
 
 /** Базовый адрес GitHub (профили и аватары участников). */
 export const GITHUB_URL = 'https://github.com';
+
+/** Порядок сортировки каталога. */
+export const SortOrder = {
+  Default: 'default',
+  PriceAsc: 'price-asc',
+  PriceDesc: 'price-desc',
+} as const;
+
+/** Порядок сортировки каталога. */
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];

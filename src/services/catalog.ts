@@ -1,18 +1,7 @@
 /** @file Фильтрация и сортировка каталога. */
 
 import type { Product } from '../domain/product';
-
-/** Константы сортировки каталога. */
-export const SortOrder = {
-  Default: 'default',
-  PriceAsc: 'price-asc',
-  PriceDesc: 'price-desc',
-} as const;
-
-/**
- * Порядок сортировки каталога.
- */
-export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+import { SortOrder } from '../config/constants';
 
 /** Фильтры каталога. */
 export interface CatalogFilters {
