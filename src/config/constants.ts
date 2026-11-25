@@ -37,3 +37,6 @@ export const SortOrder = {
 
 /** Порядок сортировки каталога. */
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+
+/** Количество товаров на странице каталога. */
+export const CATALOG_PAGE_SIZE = 6;
