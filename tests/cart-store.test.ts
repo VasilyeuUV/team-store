@@ -21,6 +21,7 @@ const phone: Product = {
   priceCents: 59999,
   category: 'smartphones',
   imageUrl: 'https://example.com/phone.png',
+  stock: 10,
 };
 
 describe('cart-store', () => {

@@ -29,4 +29,7 @@ export interface Product {
 
   /** Ссылка на изображение товара */
   readonly imageUrl: string;
+
+  /** Остаток на складе (целое число, 0 — нет в наличии). */
+  readonly stock: number;
 }

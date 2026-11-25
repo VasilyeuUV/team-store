@@ -8,4 +8,5 @@ export interface ProductDummyJsonDto {
   readonly category: string;
   readonly price: number;
   readonly thumbnail: string;
+  readonly stock?: number;
 }

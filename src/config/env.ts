@@ -1,13 +1,17 @@
 /** @file Конфигурация окружения. */
 
+const rawApiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').trim();
+
 /** Доступные источники данных. */
 export const DATA_SOURCE = {
   api: 'api',
   mock: 'mock',
 } as const;
 
-/** Базовый адрес API (переопределяется через .env). */
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://dummyjson.com';
+/** Базовый адрес API (переопределяется через .env; некорректное значение игнорируется). */
+export const API_BASE_URL = rawApiBaseUrl.startsWith('http')
+  ? rawApiBaseUrl.replace(/\/+$/, '')
+  : 'https://dummyjson.com';
 
 /** Тип источника данных: 'api' | 'mock'. */
 export type DataSource = (typeof DATA_SOURCE)[keyof typeof DATA_SOURCE];

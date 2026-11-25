@@ -7,10 +7,22 @@ import { createFooter } from './footer';
 import { createHeader, setActiveNavLink, updateHeaderCartCount } from './header';
 import { renderAboutPage } from './pages/about';
 import { renderCartPage } from './pages/cart-page';
-import { renderHomePage } from './pages/home';
+import { renderCatalogPage } from './pages/catalog-page/catalog-page';
 
-const PAGE_RENDERERS: Readonly<Record<AppRoute, () => HTMLElement>> = {
-  home: renderHomePage,
+/** Страница приложения: элемент и необязательная очистка. */
+export interface Page {
+  /** Корневой элемент страницы. */
+  readonly element: HTMLElement;
+
+  /** Очистка ресурсов при уходе со страницы. */
+  readonly destroy?: () => void;
+}
+
+/** Результат рендера страницы: элемент или объект с очисткой. */
+type PageResult = Page | HTMLElement;
+
+const PAGE_RENDERERS: Readonly<Record<AppRoute, () => PageResult>> = {
+  home: renderCatalogPage,
   about: renderAboutPage,
   cart: renderCartPage,
 };
@@ -25,8 +37,16 @@ export function renderApp(root: HTMLElement): void {
   const main = createElement('main', { className: 'main container' });
   const footer = createFooter();
 
+  let destroyCurrent: (() => void) | undefined;
+
   const showPage = (route: AppRoute): void => {
-    main.replaceChildren(PAGE_RENDERERS[route]());
+    destroyCurrent?.();
+
+    const result = PAGE_RENDERERS[route]();
+    const element = result instanceof HTMLElement ? result : result.element;
+    destroyCurrent = result instanceof HTMLElement ? undefined : result.destroy;
+
+    main.replaceChildren(element);
     setActiveNavLink(header, route);
     window.scrollTo(0, 0);
   };

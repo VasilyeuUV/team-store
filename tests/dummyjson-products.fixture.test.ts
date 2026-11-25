@@ -8,3 +8,8 @@ it('Содержит 12 товаров в 4 категориях с положи
   expect(new Set(PRODUCTS_FIXTURE.map((p) => p.category)).size).toBe(4);
   PRODUCTS_FIXTURE.forEach((p) => expect(p.price).toBeGreaterThan(0));
 });
+
+it('Содержит остатки на складе, включая один товар без остатка', () => {
+  PRODUCTS_FIXTURE.forEach((product) => expect(product.stock).toBeGreaterThanOrEqual(0));
+  expect(PRODUCTS_FIXTURE.filter((product) => product.stock === 0)).toHaveLength(1);
+});

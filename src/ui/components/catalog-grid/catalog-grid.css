@@ -1,0 +1,10 @@
+.catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--card-width));
+  justify-content: center;
+  gap: var(--gutter);
+}
+
+.catalog__status {
+  color: var(--color-muted);
+}

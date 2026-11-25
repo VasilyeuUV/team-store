@@ -3,7 +3,7 @@
 import { CART_STORAGE_KEY } from '../config/storage';
 import type { CartItem } from '../domain/cart-item';
 import type { Product } from '../domain/product';
-import { MIN_CART_QUANTITY, addCartItem } from './cart-calculations';
+import { MIN_CART_QUANTITY } from './cart-calculations';
 
 /** Минимальный интерфейс хранилища для чтения и записи корзины. */
 export interface CartStorage {
@@ -33,8 +33,18 @@ function isValidProduct(value: unknown): value is Product {
     record.priceCents >= 0;
   const hasValidCategory = typeof record.category === 'string' && record.category.trim().length > 0;
   const hasValidImageUrl = typeof record.imageUrl === 'string';
+  const hasValidStock =
+    record.stock === undefined ||
+    (typeof record.stock === 'number' && Number.isInteger(record.stock) && record.stock >= 0);
 
-  return hasValidId && hasValidTitle && hasValidPrice && hasValidCategory && hasValidImageUrl;
+  return (
+    hasValidId &&
+    hasValidTitle &&
+    hasValidPrice &&
+    hasValidCategory &&
+    hasValidImageUrl &&
+    hasValidStock
+  );
 }
 
 /**
@@ -82,8 +92,17 @@ export function parseStoredCartItems(raw: string | null): CartItem[] {
           priceCents: entry.product.priceCents,
           category: entry.product.category,
           imageUrl: entry.product.imageUrl,
+          stock: entry.product.stock ?? 0,
         };
-        items = addCartItem(items, product, entry.quantity);
+        const existingIndex = items.findIndex((item) => item.product.id === product.id);
+        items =
+          existingIndex >= 0
+            ? items.map((item, index) =>
+                index === existingIndex
+                  ? { ...item, quantity: item.quantity + entry.quantity }
+                  : item,
+              )
+            : [...items, { product, quantity: entry.quantity }];
       }
     });
 
