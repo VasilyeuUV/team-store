@@ -1,12 +1,14 @@
-/** @file Тесты загрузки товаров каталога (mock/api) */
+/** @file Тесты загрузки товаров каталога (mock/api) с кэшем. */
 
-import { describe, expect, it, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DATA_SOURCE } from '../src/config/env';
-import { fetchProducts } from '../src/data/api/products';
+import { fetchProducts, resetCatalogCache } from '../src/data/api/products';
 
-/** Хук жизненного цикла теста (запускается после завершения каждого теста в текущей области видимости). */
+beforeEach(() => {
+  resetCatalogCache();
+});
+
 afterEach(() => {
-  /** Восстановить измененные глобальные переменные. */
   vi.unstubAllGlobals();
 });
 
@@ -15,9 +17,11 @@ describe(fetchProducts.name, () => {
     const products = await fetchProducts(DATA_SOURCE.mock);
 
     expect(products).toHaveLength(12);
-    expect(new Set(products.map((p) => p.category)).size).toBe(4);
-    products.forEach((p) => expect(p.priceCents).toBeGreaterThan(0));
-    products.forEach((p) => expect(p.stock).toBeGreaterThanOrEqual(0));
+    expect(new Set(products.map((product) => product.category)).size).toBe(4);
+    products.forEach((product) => {
+      expect(product.priceCents).toBeGreaterThan(0);
+      expect(product.stock).toBeGreaterThanOrEqual(0);
+    });
   });
 
   it('в режиме api загружает DTO, фильтрует по ассортименту и мапит в домен', async () => {
@@ -61,6 +65,20 @@ describe(fetchProducts.name, () => {
         stock: 5,
       },
     ]);
+  });
+
+  it('кэширует товары: повторный вызов не делает новый запрос', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ products: [] }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchProducts(DATA_SOURCE.api);
+    await fetchProducts(DATA_SOURCE.api);
+    await fetchProducts(DATA_SOURCE.api);
+
+    expect(fetchMock).toHaveBeenCalledOnce();
   });
 
   it('бросает ошибку при неуспешном ответе API', async () => {
