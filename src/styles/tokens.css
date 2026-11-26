@@ -10,6 +10,7 @@
   --color-accent: #2563eb;
 
   --shadow-soft: 0 1px 3px rgb(15 23 42 / 6%), 0 4px 12px rgb(15 23 42 / 4%);
+  --shadow-hover: 0 8px 24px rgb(15 23 42 / 12%);
   --container-width: 1200px;
   --gutter: 24px;
   --nav-link-padding-x: 12px;
@@ -19,6 +20,7 @@
   --space-xs: 8px;
   --space-sm: 12px;
   --space-md: 16px;
+  --space-lg: 24px;
   --card-width: 240px;
   --aside-width: 240px;
 }
