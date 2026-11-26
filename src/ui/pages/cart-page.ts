@@ -232,7 +232,7 @@ export function renderCartPage(): HTMLElement {
         createElement('a', {
           className: 'btn btn--primary cart-empty__link',
           text: 'Перейти в каталог',
-          attrs: { href: getRouteHash('home') },
+          attrs: { href: getRouteHash('catalog') },
         }),
       ]);
       contentColumn.append(emptyBox);

@@ -6,7 +6,7 @@ import { ROUTE_HASHES } from '../src/config/routes';
 describe('NAV_ITEMS', () => {
   it('содержит каталог и страницу «О нас» без дублей', () => {
     const routes = NAV_ITEMS.map((item) => item.route);
-    expect(routes).toEqual(['home', 'about']);
+    expect(routes).toEqual(['catalog', 'about']);
     expect(new Set(routes).size).toBe(routes.length);
   });
 

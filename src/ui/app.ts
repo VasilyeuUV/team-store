@@ -22,8 +22,8 @@ export interface Page {
 type PageResult = Page | HTMLElement;
 
 const PAGE_RENDERERS: Readonly<Record<AppRoute, () => PageResult>> = {
-  home: renderCatalogPage,
   about: renderAboutPage,
+  catalog: renderCatalogPage,
   cart: renderCartPage,
 };
 

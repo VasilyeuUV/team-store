@@ -11,6 +11,6 @@ export interface NavItem {
 
 /** Пункты основной навигации. */
 export const NAV_ITEMS: readonly NavItem[] = [
-  { route: 'home', title: 'Каталог' },
+  { route: 'catalog', title: 'Каталог' },
   { route: 'about', title: 'О нас' },
 ];

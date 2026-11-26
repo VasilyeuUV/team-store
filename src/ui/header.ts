@@ -17,7 +17,7 @@ export function createHeader(activeRoute: AppRoute): HTMLElement {
   const logo = createElement('a', {
     className: 'header__logo',
     text: APP_TITLE,
-    attrs: { href: getRouteHash('home') },
+    attrs: { href: getRouteHash('about') },
   });
 
   const navList = createElement(

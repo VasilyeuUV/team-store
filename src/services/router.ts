@@ -19,7 +19,7 @@ export function parseRoute(hash: string): AppRoute {
   const found = (Object.keys(ROUTE_HASHES) as AppRoute[]).find(
     (route) => ROUTE_HASHES[route] === `#/${path}`,
   );
-  return found ?? 'home';
+  return found ?? 'about';
 }
 
 /**
