@@ -114,4 +114,7 @@ npm run format    # Prettier
 
 ## Деплой
 
-- **Production:** ветка `develop` — Netlify
+- **Production:** ветка `main` — Netlify пересобирает сайт при пуше в `main`.
+- **Интеграция:** `develop` — сюда идут PR задач; на production не влияет.
+- **Deploy Preview:** создаётся на каждый PR.
+- Сборка: `npm run build` → `dist` (настройки в `netlify.toml`, Node 22).
