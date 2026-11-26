@@ -14,7 +14,7 @@ describe('ROUTE_HASHES', () => {
     expect(new Set(hashes).size).toBe(hashes.length);
   });
 
-  it('главная страница соответствует корню', () => {
-    expect(ROUTE_HASHES.home).toBe('#/');
+  it('стартовая страница «О нас» соответствует корню', () => {
+    expect(ROUTE_HASHES.about).toBe('#/');
   });
 });
