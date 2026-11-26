@@ -15,16 +15,17 @@ function createMemberCard(member: TeamMember): HTMLElement {
   const avatar = createElement('img', {
     className: 'member__avatar',
     attrs: {
-      src: `${profileUrl}.png?size=160`,
+      src: `${profileUrl}.png?size=192`,
       alt: `Аватар ${member.name}`,
-      width: '80',
-      height: '80',
+      width: '96',
+      height: '96',
       loading: 'lazy',
     },
   });
+  const avatarMedia = createElement('div', { className: 'member__media' }, [avatar]);
 
   return createElement('li', { className: 'member' }, [
-    avatar,
+    avatarMedia,
     createElement('h3', { className: 'member__name', text: member.name }),
     createGithubLink(profileUrl, `@${member.github}`, 'member__github'),
     createElement('p', { className: 'member__role', text: member.role }),

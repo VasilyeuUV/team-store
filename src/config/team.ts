@@ -15,22 +15,23 @@ export const TEAM_MEMBERS: readonly TeamMember[] = [
   {
     name: 'Vlad Vasilev',
     github: 'VasilyeuUV',
-    role: 'Архитектура проекта, каталог товаров, поиск и фильтрация',
+    role: 'Архитектура (domain/services/data/ui), данные DummyJSON и mock, каталог: сервисы фильтрации/сортировки/пагинации (TDD), страница каталога, комбобокс категорий, двойной ползунок цены, кэш и отмена запросов, инфраструктура (ESLint/Prettier/husky, CI, Netlify), документация',
   },
   {
     name: 'Vasyl Krychfalushii',
     github: 'KrychVas',
-    role: 'UI-каркас и навигация, корзина, промокоды, страница «О нас» и тесты',
+    role: 'UI-каркас и навигация, страница «О нас», корзина: логика расчётов, промокод SALE10, localStorage, страница корзины, счётчик в шапке, тесты',
   },
 ];
 
 /** Технологии, используемые командой в проекте. */
 export const TECH_STACK: readonly string[] = [
   'TypeScript',
-  'Vite',
+  'Vite (vanilla)',
   'Vitest',
   'ESLint',
   'Prettier',
+  'husky + lint-staged',
   'GitHub Actions',
   'Netlify',
 ];
